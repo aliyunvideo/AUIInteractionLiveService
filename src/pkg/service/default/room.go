@@ -43,7 +43,7 @@ func (l *LiveRoomManager) GetIMToken(env, userId, deviceId, deviceType string) (
 
 }
 
-func (l *LiveRoomManager) CreateRoom(title, notice, anchorId string, extends string, mode int) (*models.RoomInfo, error) {
+func (l *LiveRoomManager) CreateRoom(title, notice, coverUrl, anchorId string, extends string, mode int) (*models.RoomInfo, error) {
 	var chatId string
 	var err error
 	chatId, err = l.imService.CreateMessageGroup(anchorId, nil)
@@ -59,6 +59,7 @@ func (l *LiveRoomManager) CreateRoom(title, notice, anchorId string, extends str
 		UpdatedAt: time.Now(),
 		Title:     title,
 		Notice:    notice,
+		CoverUrl:  coverUrl,
 		AnchorId:  anchorId,
 		Extends:   extends,
 	}
@@ -97,8 +98,8 @@ func (l *LiveRoomManager) CreateRoom(title, notice, anchorId string, extends str
 	return r, nil
 }
 
-func (l *LiveRoomManager) GetRoomList(pageSize int, pageNum int, role string) ([]*models.RoomInfo, error) {
-	ids, err := l.sa.GetRoomList(pageSize, pageNum)
+func (l *LiveRoomManager) GetRoomList(pageSize int, pageNum int, status int, role string) ([]*models.RoomInfo, error) {
+	ids, err := l.sa.GetRoomList(pageSize, pageNum, status)
 	if err != nil {
 		return nil, err
 	}
@@ -242,7 +243,7 @@ func (l *LiveRoomManager) GetRoom(id string, userId string) (*models.RoomInfo, e
 
 	r.VodInfo, err = l.getVodInfo(r)
 	if err != nil {
-		return nil, err
+		fmt.Printf("[WARN] getVodInfo failed. err:%v \n", err)
 	}
 
 	imService, err := im.NewLiveIMService(l.appConfig)
@@ -252,25 +253,29 @@ func (l *LiveRoomManager) GetRoom(id string, userId string) (*models.RoomInfo, e
 
 	details, err := imService.GetGroupDetails(r.ChatId, userId)
 	if err != nil {
-		return nil, err
-	}
+		fmt.Printf("[WARN] GetGroupDetails failed. err:%v \n", err)
+	} else {
+		r.Metrics = &models.Metrics{
+			OnlineCount: uint64(details.OnlineCount),
+			LikeCount:   uint64(details.LikeCount),
+			Pv:          uint64(details.PV),
+			Uv:          uint64(details.UV),
+		}
 
-	r.Metrics = &models.Metrics{
-		OnlineCount: uint64(details.OnlineCount),
-		LikeCount:   uint64(details.LikeCount),
-		Pv:          uint64(details.PV),
-		Uv:          uint64(details.UV),
-	}
-
-	r.UserStatus = &models.UserStatus{
-		Mute:       details.IsMute,
-		MuteSource: details.MuteBy,
+		r.UserStatus = &models.UserStatus{
+			Mute:       details.IsMute,
+			MuteSource: details.MuteBy,
+		}
 	}
 
 	return r, nil
 }
 
 func (l *LiveRoomManager) getPushLiveInfo(r *models.RoomInfo) (*models.PushLiveInfo, error) {
+	if r.Status == models.LiveStatusOff {
+		return nil, nil
+	}
+
 	streamName := r.ID
 	liveConfig := l.appConfig.LiveStreamConfig
 
@@ -292,6 +297,10 @@ M3U8 格式: http://wgtest.pull.mcsun.cn/AppName/StreamName.m3u8?auth_key={鉴�
 UDP 格式: artc://wgtest.pull.mcsun.cn/AppName/StreamName?auth_key={鉴权串}
 */
 func (l *LiveRoomManager) getPullLiveInfo(r *models.RoomInfo) (*live2.PullLiveInfo, error) {
+	if r.Status == models.LiveStatusOff {
+		return nil, nil
+	}
+
 	streamName := r.ID
 	liveConfig := l.appConfig.LiveStreamConfig
 
@@ -328,6 +337,7 @@ func (l *LiveRoomManager) getVodInfo(r *models.RoomInfo) (*models.VodInfo, error
 	if r.Status != models.LiveStatusOff {
 		return nil, nil
 	}
+
 	var err error
 	vodId := r.VodId
 	if vodId == "" {

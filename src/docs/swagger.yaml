@@ -26,6 +26,10 @@ definitions:
         description: 主播Nick
         example: 主播nick
         type: string
+      cover_url:
+        description: 直播封面url
+        example: 直播封面url
+        type: string
       extends:
         description: 扩展字段，通常是JSON格式字符串
         example: 扩展字段，通常是JSON格式字符串
@@ -50,9 +54,11 @@ definitions:
   handler.DeleteRequest:
     properties:
       id:
+        description: 直播Id
         example: uuid，直播房间id
         type: string
       user_id:
+        description: 当前用户Id
         example: 当前用户id
         type: string
     required:
@@ -68,9 +74,11 @@ definitions:
   handler.GetRequest:
     properties:
       id:
+        description: 直播Id
         example: uuid，直播房间id
         type: string
       user_id:
+        description: 用户Id
         example: 当前用户id
         type: string
     required:
@@ -80,12 +88,18 @@ definitions:
   handler.ListRequest:
     properties:
       page_num:
+        description: PageNum
         example: 1
         type: integer
       page_size:
+        description: PageSize
         example: 10
         type: integer
+      status:
+        description: 直播状态，不传为默认值-1 ，代表所有类型；0-准备中，1-已开始，2-已结束
+        type: integer
       user_id:
+        description: 用户id
         type: string
     required:
     - page_num
@@ -117,12 +131,15 @@ definitions:
   handler.TokenRequest:
     properties:
       device_id:
+        description: 设备Id
         example: 设备id：DEVICE-ID
         type: string
       device_type:
+        description: 设备类型：android/ios/web/win/mac ,H5接入请一定用web
         example: 设备类型：android/ios/web/win/mac
         type: string
       user_id:
+        description: 用户Id
         example: 用户id:foo
         type: string
     required:
@@ -144,6 +161,7 @@ definitions:
         example: 扩展字段，通常是JSON格式字符串
         type: string
       id:
+        description: 直播Id
         example: 直播Id
         type: string
       notice:
@@ -158,12 +176,16 @@ definitions:
   live.PullLiveInfo:
     properties:
       flv_url:
+        description: FLV协议拉流地址
         type: string
       hls_url:
+        description: HLS协议拉流地址
         type: string
       rtmp_url:
+        description: RTMP协议拉流地址
         type: string
       rts_url:
+        description: RTS协议拉流地址
         type: string
     type: object
   models.LinkInfo:
@@ -209,12 +231,16 @@ definitions:
   models.Metrics:
     properties:
       like_count:
+        description: 当前直播间点赞总量
         type: integer
       online_count:
+        description: 当前直播间在线人数
         type: integer
       pv:
+        description: 当前直播间访问人次
         type: integer
       uv:
+        description: 当前直播间独立访问用户数，
         type: integer
     type: object
   models.PlayInfo:
@@ -275,10 +301,13 @@ definitions:
   models.PushLiveInfo:
     properties:
       rtmp_url:
+        description: RTMP协议地址
         type: string
       rts_url:
+        description: RTS协议地址
         type: string
       srt_url:
+        description: SRT协议地址
         type: string
     type: object
   models.RoomInfo:
@@ -364,8 +393,10 @@ definitions:
   models.UserStatus:
     properties:
       mute:
+        description: 用户设备是否静音
         type: boolean
       mute_source:
+        description: 静音来源
         items:
           type: string
         type: array

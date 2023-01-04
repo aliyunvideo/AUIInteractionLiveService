@@ -7,9 +7,9 @@ import (
 type LiveRoomManagerAPI interface {
 	GetIMToken(env, userId, deviceId, deviceType string) (string, error)
 
-	GetRoomList(pageSize int, pageNum int, role string) ([]*models.RoomInfo, error)
+	GetRoomList(pageSize int, pageNum int, status int, role string) ([]*models.RoomInfo, error)
 
-	CreateRoom(title, notice, Anchor string, extend string, mode int) (*models.RoomInfo, error)
+	CreateRoom(title, notice, coverUrl string, Anchor string, extend string, mode int) (*models.RoomInfo, error)
 
 	GetRoom(id, role string) (*models.RoomInfo, error)
 

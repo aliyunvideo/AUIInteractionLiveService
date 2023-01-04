@@ -3,7 +3,7 @@ package storage
 import "ApsaraLive/pkg/models"
 
 type StorageAPI interface {
-	GetRoomList(pageSize int, pageNum int) ([]string, error)
+	GetRoomList(pageSize int, pageNum int, status int) ([]string, error)
 
 	CreateRoom(r *models.RoomInfo) error
 

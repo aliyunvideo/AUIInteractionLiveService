@@ -28,5 +28,14 @@ go install github.com/swaggo/swag/cmd/swag@latest
 swag init -g pkg/handler/*.go
 ```
 
+
+## 基于Swagger生成多语言sdk
+如果需要通过服务端应用调用本应用API，可以通过辅助该工具使用：
+https://github.com/swagger-api/swagger-codegen
+
+```bash
+swagger-codegen generate -i ./docs/swagger.json -l java -o /tmp/test/
+```
+
 ## 函数使用
 请参考：https://docs.serverless-devs.com/serverless-devs/quick_start

@@ -71,18 +71,24 @@ type RoomInfo struct {
 }
 
 type Metrics struct {
+	// 当前直播间在线人数
 	OnlineCount uint64 `json:"online_count" gorm:"-"`
-	LikeCount   uint64 `json:"like_count" gorm:"-"`
-	Pv          uint64 `json:"pv" gorm:"-"`
-	Uv          uint64 `json:"uv" gorm:"-"`
+	// 当前直播间点赞总量
+	LikeCount uint64 `json:"like_count" gorm:"-"`
+	// 当前直播间访问人次
+	Pv uint64 `json:"pv" gorm:"-"`
+	// 当前直播间独立访问用户数，
+	Uv uint64 `json:"uv" gorm:"-"`
 }
 
 type UserStatus struct {
-	Mute       bool     `json:"mute" gorm:"-"`
+	// 用户设备是否静音
+	Mute bool `json:"mute" gorm:"-"`
+	// 静音来源
 	MuteSource []string `json:"mute_source" gorm:"-"`
 }
 
-// 前缀字段（artc://）+固定字段（live.aliyun.com）+拉流标识位（play）+roomid（房间ID）+SdkIAppID（连麦应用ID）+UserID（连麦观众ID）+timestamp（有效时长时间戳）+token
+// LinkInfo 前缀字段（artc://）+固定字段（live.aliyun.com）+拉流标识位（play）+roomid（房间ID）+SdkIAppID（连麦应用ID）+UserID（连麦观众ID）+timestamp（有效时长时间戳）+token
 // 播放前缀+播流域名+AppName（live） + StreamID（由连麦应用ID_房间ID_主播ID_camera组成）+auth_key
 // LinkInfo 直播连麦推拉流
 type LinkInfo struct {
@@ -94,10 +100,14 @@ type LinkInfo struct {
 	CdnPullInfo *live.PullLiveInfo `json:"cdn_pull_info"`
 }
 
+// PushLiveInfo 推流信息
 type PushLiveInfo struct {
+	// RTMP协议地址
 	RtmpUrl string `json:"rtmp_url"`
-	RtsUrl  string `json:"rts_url"`
-	SrtUrl  string `json:"srt_url"`
+	// RTS协议地址
+	RtsUrl string `json:"rts_url"`
+	// SRT协议地址
+	SrtUrl string `json:"srt_url"`
 }
 
 type Status struct {
@@ -107,19 +117,21 @@ type Status struct {
 }
 
 const (
+	// LiveStatusAll -1 所有状态
+	LiveStatusAll = -1
 	// LiveStatusPrepare 0 准备中
-	LiveStatusPrepare = iota
+	LiveStatusPrepare = 0
 	// LiveStatusOn 1 已开始
-	LiveStatusOn
+	LiveStatusOn = 1
 	// LiveStatusOff 2 已结束
-	LiveStatusOff
+	LiveStatusOff = 2
 )
 
 const (
 	// LiveModeNormal 0 常规模式
-	LiveModeNormal = iota
+	LiveModeNormal = 0
 	// LiveModeLink 1 连麦模式
-	LiveModeLink
-	// LiveModePk 2 pk模式
-	LiveModePk
+	LiveModeLink = 1
+	// LiveModePk 2 pk模式,暂未实现
+	LiveModePk = 2
 )

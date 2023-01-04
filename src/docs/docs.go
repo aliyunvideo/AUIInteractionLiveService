@@ -724,6 +724,11 @@ const docTemplate = `{
                     "type": "string",
                     "example": "主播nick"
                 },
+                "cover_url": {
+                    "description": "直播封面url",
+                    "type": "string",
+                    "example": "直播封面url"
+                },
                 "extends": {
                     "description": "扩展字段，通常是JSON格式字符串",
                     "type": "string",
@@ -755,10 +760,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "id": {
+                    "description": "直播Id",
                     "type": "string",
                     "example": "uuid，直播房间id"
                 },
                 "user_id": {
+                    "description": "当前用户Id",
                     "type": "string",
                     "example": "当前用户id"
                 }
@@ -781,10 +788,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "id": {
+                    "description": "直播Id",
                     "type": "string",
                     "example": "uuid，直播房间id"
                 },
                 "user_id": {
+                    "description": "用户Id",
                     "type": "string",
                     "example": "当前用户id"
                 }
@@ -799,14 +808,21 @@ const docTemplate = `{
             ],
             "properties": {
                 "page_num": {
+                    "description": "PageNum",
                     "type": "integer",
                     "example": 1
                 },
                 "page_size": {
+                    "description": "PageSize",
                     "type": "integer",
                     "example": 10
                 },
+                "status": {
+                    "description": "直播状态，不传为默认值-1 ，代表所有类型；0-准备中，1-已开始，2-已结束",
+                    "type": "integer"
+                },
                 "user_id": {
+                    "description": "用户id",
                     "type": "string"
                 }
             }
@@ -852,14 +868,17 @@ const docTemplate = `{
             ],
             "properties": {
                 "device_id": {
+                    "description": "设备Id",
                     "type": "string",
                     "example": "设备id：DEVICE-ID"
                 },
                 "device_type": {
+                    "description": "设备类型：android/ios/web/win/mac ,H5接入请一定用web",
                     "type": "string",
                     "example": "设备类型：android/ios/web/win/mac"
                 },
                 "user_id": {
+                    "description": "用户Id",
                     "type": "string",
                     "example": "用户id:foo"
                 }
@@ -885,6 +904,7 @@ const docTemplate = `{
                     "example": "扩展字段，通常是JSON格式字符串"
                 },
                 "id": {
+                    "description": "直播Id",
                     "type": "string",
                     "example": "直播Id"
                 },
@@ -904,15 +924,19 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "flv_url": {
+                    "description": "FLV协议拉流地址",
                     "type": "string"
                 },
                 "hls_url": {
+                    "description": "HLS协议拉流地址",
                     "type": "string"
                 },
                 "rtmp_url": {
+                    "description": "RTMP协议拉流地址",
                     "type": "string"
                 },
                 "rts_url": {
+                    "description": "RTS协议拉流地址",
                     "type": "string"
                 }
             }
@@ -978,15 +1002,19 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "like_count": {
+                    "description": "当前直播间点赞总量",
                     "type": "integer"
                 },
                 "online_count": {
+                    "description": "当前直播间在线人数",
                     "type": "integer"
                 },
                 "pv": {
+                    "description": "当前直播间访问人次",
                     "type": "integer"
                 },
                 "uv": {
+                    "description": "当前直播间独立访问用户数，",
                     "type": "integer"
                 }
             }
@@ -1068,12 +1096,15 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "rtmp_url": {
+                    "description": "RTMP协议地址",
                     "type": "string"
                 },
                 "rts_url": {
+                    "description": "RTS协议地址",
                     "type": "string"
                 },
                 "srt_url": {
+                    "description": "SRT协议地址",
                     "type": "string"
                 }
             }
@@ -1191,9 +1222,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "mute": {
+                    "description": "用户设备是否静音",
                     "type": "boolean"
                 },
                 "mute_source": {
+                    "description": "静音来源",
                     "type": "array",
                     "items": {
                         "type": "string"
