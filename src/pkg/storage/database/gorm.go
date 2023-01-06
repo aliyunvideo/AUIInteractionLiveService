@@ -103,5 +103,5 @@ func (g *GormDb) UpdateRoom(id string, r *models.RoomInfo) error {
 }
 
 func (g *GormDb) DeleteRoom(id string) error {
-	return g.GetDB().Delete(id).Error
+	return g.GetDB().Where("id = ?", id).Delete(&models.RoomInfo{}).Error
 }
